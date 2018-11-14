@@ -79,7 +79,6 @@ def main():
     fp.close()
 
     cal_led.off()
-    launch_time = 100000000000000000000
     # II. Main Loop
 
     while True:
@@ -90,14 +89,10 @@ def main():
         launch_indicator = check_launch(launch_indicator,flt_params, cal_led)
 
         if launch_indicator:
-            launch_time = time.time()
             flt_params.append(str('launch'))
             launch_indicator = False
 
         write_to_file(filename, flt_params)  # Append parameters to file
-        
-        if (time.time()-launch_time) > (40*60):
-          sys.exit()
 
 def read_flt_params(baro, IMU):
     global g_counter
