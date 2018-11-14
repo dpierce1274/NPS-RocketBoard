@@ -30,7 +30,7 @@ from LSM9DS1 import *
 
 
 LSM9DS0 = 1
-
+gain = 0.07         # Gyro Gain based on init setting
 
 def detectIMU():
     try:
@@ -41,10 +41,10 @@ def detectIMU():
         LSM9DS1_WHO_M_response = (bus.read_byte_data(LSM9DS1_MAG_ADDRESS, LSM9DS1_WHO_AM_I_M))
 
     except IOError as f:
-        print ''  # need to do something here, so we just print a space
+        print('')  # need to do something here, so we just print a space
     else:
         if (LSM9DS1_WHO_XG_response == 0x68) and (LSM9DS1_WHO_M_response == 0x3d):
-            print "Found LSM9DS1"
+            print("Found LSM9DS1")
 
     time.sleep(1)
 
@@ -146,18 +146,14 @@ def initIMU():
 
 
 def get_IMU_data():
-    ACCx = readACCx()
-    ACCy = readACCy()
-    ACCz = readACCz()
-    GRYx = readGYRx()
-    GRYy = readGYRy()
-    GRYz = readGYRz()
-    MAGx = readMAGx()
-    MAGy = readMAGy()
-    MAGz = readMAGz()
+    ACCx = '{:.2f}'.format(readACCx()*0.244/1000)
+    ACCy = '{:.2f}'.format(readACCy()*0.244/1000)
+    ACCz = '{:.2f}'.format(readACCz()*0.244/1000)
+    GRYx = '{:.2f}'.format(readGYRx()*gain)
+    GRYy = '{:.2f}'.format(readGYRy()*gain)
+    GRYz = '{:.2f}'.format(readGYRz()*gain)
+    MAGx = '{:.2f}'.format(readMAGx())
+    MAGy = '{:.2f}'.format(readMAGy())
+    MAGz = '{:.2f}'.format(readMAGz())
 
-    ACC = ACCx, ACCy, ACCz
-    GRY = GRYx, GRYy, GRYz
-    MAG = MAGx, MAGy, MAGz
-
-    return ACC, GRY, MAG
+    return ACCx, ACCy, ACCz, GRYx, GRYy, GRYz, MAGx, MAGy, MAGz

@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "Main.py", line 192, in <module>
+    main()
+  File "Main.py", line 100, in main
+    sys.exit()
+SystemExit
+
