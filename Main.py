@@ -31,6 +31,8 @@ import adxl377
 import traceback
 import IMU
 from gpiozero import LED
+import serial
+import ublox
 
 g_counter = 0
 
@@ -52,14 +54,15 @@ def main():
     baro = mpl3115a2.MPL3115A2(busID=1, slaveAddr=0x60, sea_level_pressure=1012.0)
     acc = adxl377.ADXL377(busID=1, slaveAddr=0x48)
     ser = serial.Serial(port='/dev/ttyAMA0', baudrate=9600, bytesize=8, parity='N', stopbits=1, timeout=0.01)
+    ubl = ublox.UBlox("spi:0.0", baudrate=5000000, timeout=0)
     # Initialize the sensors
     IMU.initIMU()
 
     # Configure the GPS messages
     ubl.configure_solution_rate(rate_ms=500)
-    ubl.configure_message_rate(navio.ublox.CLASS_NAV, navio.ublox.MSG_NAV_POSLLH, 1)
-    ubl.configure_message_rate(navio.ublox.CLASS_NAV, navio.ublox.MSG_NAV_STATUS, 1)
-    ubl.configure_message_rate(navio.ublox.CLASS_NAV, navio.ublox.MSG_NAV_VELNED, 1)
+    ubl.configure_message_rate(ublox.CLASS_NAV, ublox.MSG_NAV_POSLLH, 1)
+    ubl.configure_message_rate(ublox.CLASS_NAV, ublox.MSG_NAV_STATUS, 1)
+    ubl.configure_message_rate(ublox.CLASS_NAV, ublox.MSG_NAV_VELNED, 1)
 
     # Create data file and write header #
     tstr = time.strftime('%Y-%m-%d_%H-%M-%S-%Z.txt')
