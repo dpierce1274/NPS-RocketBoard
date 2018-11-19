@@ -8,16 +8,19 @@ import util
 
 def main():
 
-    ser = serial.Serial(port='/dev/ttyAMA0', baudrate=9600, bytesize=8, parity='N', stopbits=1, timeout=0.01)
-    ubl = ublox.UBlox("spi:0.0", baudrate=5000000, timeout=0)
-    util.check_apm()
-
+    ser = serial.Serial(port='/dev/ttyS0', baudrate=9600, bytesize=8, parity='N', stopbits=1, timeout=0.01)
+ 
     # Create data file and write header #
     tstr = time.strftime('%Y-%m-%d_%H-%M-%S-%Z.txt')
     filename = str('Telemetry Data ') + tstr
+    
+    ubl = ublox.UBlox("spi:0.0", baudrate=5000000, timeout=2)
 
-# Configure the GPS messages
-    ubl.configure_solution_rate(rate_ms=500)
+    ubl.set_preferred_dynamic_model(None)
+    ubl.set_preferred_usePPP(None)
+    
+    # Configure the GPS messages
+    ubl.configure_solution_rate(rate_ms=1000)
     ubl.configure_message_rate(ublox.CLASS_NAV, ublox.MSG_NAV_POSLLH, 1)
     ubl.configure_message_rate(ublox.CLASS_NAV, ublox.MSG_NAV_STATUS, 1)
     ubl.configure_message_rate(ublox.CLASS_NAV, ublox.MSG_NAV_VELNED, 1)
@@ -29,34 +32,36 @@ def main():
 
     while True:
         msg = ubl.receive_message()
+        print(msg)
         if msg is None:
             if opts.reopen:
                 ubl.close()
-                ubl = ublox.UBlox("spi:0.0", baudrate=5000000, timeout=0)
+                ubl = ublox.UBlox("spi:0.0", baudrate=5000000, timeout=2)
                 continue
             print(empty)
             break
         if msg.name() == "NAV_STATUS":
-            outstr = str(msg).split(",")[1:]
-            fix_id = int(str_to_num(outstr[0]))  # GPS fix - from UBX-NAV-STATUS function
-            fix_ok = int(str_to_num(outstr[2]))  # gpsFixOk (1 =  position and velocity valid and within DOP and ACC)
+            outstr = str(msg).split(",")
+            fix_id = int(str_to_num(outstr[1]))  # GPS fix - from UBX-NAV-STATUS function
+            fix_ok = int(str_to_num(outstr[3]))  # gpsFixOk (1 =  position and velocity valid and within DOP and ACC)
             write_to_file(filename, outstr)
             check_msg.append(msg.name())
+            print(outstr)
         if msg.name() == "NAV_POSLLH":
-            outstr = str(msg).split(",")[1:]
-            lon = float('%.7f' % (str_to_num(outstr[0])*10**-7))        # GPS longitude (deg)
-            lat = float('%.7f' % (str_to_num(outstr[1])*10**-7))        # GPS latitude (deg)
-            h_msl = float('%.1f' % (int(str_to_num(outstr[3])/1000)))   # GPS height MSL (m)
+            outstr = str(msg).split(",")
+            lon = float('%.7f' % (str_to_num(outstr[1])*10**-7))        # GPS longitude (deg)
+            lat = float('%.7f' % (str_to_num(outstr[2])*10**-7))        # GPS latitude (deg)
+            h_msl = float('%.1f' % (int(str_to_num(outstr[4])/1000)))   # GPS height MSL (m)
             write_to_file(filename, outstr)
             check_msg.append(msg.name())
         if msg.name() == "NAV_VELNED":
-            outstr = str(msg).split(",")[1:]
-            gps_hdg = float('%.1f' % (str_to_num(outstr[5])*10**-5))    # GPS heading (deg)
-            gps_gspd = int(str_to_num(outstr[4])/100)                   # GPS ground speed (m/s)
+            outstr = str(msg).split(",")
+            gps_hdg = float('%.1f' % (str_to_num(outstr[6])*10**-5))    # GPS heading (deg)
+            gps_gspd = int(str_to_num(outstr[5])/100)                   # GPS ground speed (m/s)
             write_to_file(filename, outstr)
             check_msg.append(msg.name())
         if msg.name() == "NAV_PVT":
-            outstr = str(msg).split(",")[1:]
+            outstr = str(msg).split(",")
             hour = outstr[4]
             min = outstr[5]
             sec = outstr[6]
@@ -65,9 +70,12 @@ def main():
             check_msg.append(msg.name())
 
         if all(elem in check_msg for elem in message_names):
-            data = [gps_time, 'NAVMSG', time.time(), lat, lon, h_msl]
+            data = [gps_time, 'NAVMSG', int(time.time()), lat, lon, h_msl]
             write_to_file(filename, data)
             send_gps(ser, data)
+            check_msg = []
+            
+        
 
 
 def send_gps(ser, data):
@@ -100,7 +108,7 @@ def write_to_file(filename, flt_params):
     # This function writes the flight parameters array to a .txt file on the SD Card
     # Input: flight parameters
     # Output: none
-    fp = open(filename, 'a+')
+    fp = open(filename, 'a')
     fp.write(str(flt_params) + '\n')
     fp.close()
 
