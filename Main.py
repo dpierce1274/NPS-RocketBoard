@@ -28,16 +28,12 @@ SOFTWARE.
 import os
 import platform
 import datetime
-import navio.util
-import navio.ublox
 import spidev
 import time
 import argparse
 import sys
 import math
-import navio.lsm9ds1test
 import mdl3115a2
-import FEETECH
 import serial
 import subprocess
 import shlex
@@ -60,7 +56,7 @@ def main():
 
     # I. Program initialization
     # Define initialization variables
-    ubl = navio.ublox.UBlox("spi:0.0", baudrate=5000000, timeout=0)
+    # ubl = navio.ublox.UBlox("spi:0.0", baudrate=5000000, timeout=0)
     baro = mdl3115a2.MDL3115A2(busID=1, slaveAddr=0x60)
 
     # Initialize the sensors
