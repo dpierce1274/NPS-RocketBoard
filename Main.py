@@ -48,6 +48,7 @@ def main():
 
     # Declare global variables
     global g_counter
+    launch_indicator = False
 
     # Configure Status LEDs
     cal_led = LED(26)
@@ -61,7 +62,6 @@ def main():
 
     # Initialize the sensors
     IMU.initIMU()
-    baro.initialize()
 
     # Configure the GPS messages
     # ubl.configure_solution_rate(rate_ms=500)
@@ -72,7 +72,8 @@ def main():
     # Create data file and write header #
     tstr = time.strftime('%Y-%m-%d_%H-%M-%S-%Z.txt')
     filename = str('Flight Data ') + tstr
-    header_1 = str('Counter, Time, ACCx, ACCy, ACCz, GRYx, GRYy, GRYz, MAGx, MAGy, MAGz, Temp(F), Pres \n')
+    header_1 = str('Counter, Time, ACCx, ACCy, ACCz, GRYx, GRYy, GRYz, MAGx, MAGy, MAGz, Temp(C), Pres(mbar), '
+                   'Alt (m) \n')
     fp = open(filename, 'w+')
     fp.write(header_1)
     fp.close()
@@ -84,16 +85,36 @@ def main():
         g_counter += 1
         status_led(check_led)                       # Flash status LED
         flt_params = read_flt_params(baro, IMU)     # Get the flight parameters
-        write_to_file(filename,flt_params)          # Append parameters to file
 
+        launch_indicator = check_launch(launch_indicator,flt_params, cal_led)
+
+        if launch_indicator:
+            flt_params.append(str('launch'))
+            launch_indicator = False
+
+        write_to_file(filename, flt_params)  # Append parameters to file
 
 def read_flt_params(baro, IMU):
     global g_counter
 
-    baro_data = baro.get_barodata()
+    baro_data = baro.get_barometer_data()
     imu_data = IMU.get_IMU_data()
-    t = time.time()
-    output = [g_counter,t,imu_data,baro_data]
+    ACCx = float(imu_data[0])
+    ACCy = float(imu_data[1])
+    ACCz = float(imu_data[2])
+    GRYx = float(imu_data[3])
+    GRYy = float(imu_data[4])
+    GRYz = float(imu_data[5])
+    MAGx = float(imu_data[6])
+    MAGy = float(imu_data[7])
+    MAGz = float(imu_data[8])
+    temp = float(baro_data[0])
+    pres = float(baro_data[1])
+    alt = float(baro_data[2])
+
+    t = '{:.2f}'.format(time.time())
+    t = float(t)
+    output = [g_counter, t, ACCx, ACCy, ACCz, GRYx, GRYy, GRYz, MAGx, MAGy, MAGz, temp, pres, alt]
     return output
 
 
@@ -136,24 +157,38 @@ def str_to_num(input):
 def status_led(check_led):
     global g_counter
 
-    if g_counter % 10 == 0:
+    if g_counter % 200 == 0:
         check_led.on()
-    elif g_counter % 20 == 0:
+        print('Main enabled')
+    elif g_counter % 100 == 0:
         check_led.off()
+
+
+def check_launch(launch_indicator, flt_params, led):
+
+    if (abs(flt_params[2]) or abs(flt_params[3]) or abs(flt_params[4])) > 4:
+        print(abs(flt_params[2]), abs(flt_params[3]), abs(flt_params[4]))
+        launch = True
+        led.on()
+    elif launch_indicator:
+        launch = True
+    else:
+        launch = False
+    return launch
+
+
+
 
 
 start = time.time()
 # Execute `main()` function
 if __name__ == '__main__':
-    main()
-    sys.exit()
     try:
         main()
     except KeyboardInterrupt:
-        print "Program Terminating..."
-        stop = time.time()
+        print("Program Terminating...")
         time.sleep(1)
-        print('Data Rate: %.1f samples/second' % (G_counter/(stop-start)))
+        sys.exit()
     except:                                                     # Pass and log all other errors
         s = traceback.format_exc()
         fp = open("Traceback_Log.txt", "a")
