@@ -46,10 +46,28 @@ for line in fp.readlines():
     alt.append(float(alt_reading[0:5]))
 
 # Plot Results
+
+pyplot.subplot(131)
 pyplot.title('Acceleration vs. Time', fontsize=15, weight='bold')
 pyplot.plot(t, ACCx, t, ACCy, t, ACCz)
 pyplot.xlabel('Time (s)')
-pyplot.ylabel('Altitude (m)')
+pyplot.ylabel('Acceleration (Gs)')
 axis_labels = ['X-Axis', 'Y-Axis', 'Z-Axis']
 pyplot.legend(axis_labels)
+
+
+pyplot.subplot(132)
+pyplot.title('Rotation vs. Time', fontsize=15, weight='bold')
+pyplot.plot(t, GRYx, t, GRYy, t, GRYz)
+pyplot.xlabel('Time (s)')
+pyplot.ylabel('Rotation Rate (deg/s)')
+axis_labels = ['X-Axis', 'Y-Axis', 'Z-Axis']
+pyplot.legend(axis_labels)
+
+
+pyplot.subplot(133)
+pyplot.title('Altitude vs. Time', fontsize=15, weight='bold')
+pyplot.plot(t, alt)
+pyplot.xlabel('Time (s)')
+pyplot.ylabel('Altitude (m)')
 pyplot.show()
