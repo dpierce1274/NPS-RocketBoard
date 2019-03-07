@@ -43,31 +43,38 @@ for line in fp.readlines():
     temp.append(float(cols[11]))
     pres.append(float(cols[12]))
     alt_reading = cols[13]
-    alt.append(float(alt_reading[0:5]))
+    alt.append(float(alt_reading[:-2]))
 
 # Plot Results
 
-pyplot.subplot(131)
+pyplot.subplot(121)
 pyplot.title('Acceleration vs. Time', fontsize=15, weight='bold')
-pyplot.plot(t, ACCx, t, ACCy, t, ACCz)
+pyplot.plot(t[0:1200], ACCx[0:1200], t[0:1200], ACCy[0:1200], t[0:1200], ACCz[0:1200], linewidth=1)
 pyplot.xlabel('Time (s)')
 pyplot.ylabel('Acceleration (Gs)')
 axis_labels = ['X-Axis', 'Y-Axis', 'Z-Axis']
 pyplot.legend(axis_labels)
 
 
-pyplot.subplot(132)
+pyplot.subplot(122)
 pyplot.title('Rotation vs. Time', fontsize=15, weight='bold')
-pyplot.plot(t, GRYx, t, GRYy, t, GRYz)
+pyplot.plot(t[0:1200], GRYx[0:1200], t[0:1200], GRYy[0:1200], t[0:1200], GRYz[0:1200], linewidth=1)
 pyplot.xlabel('Time (s)')
 pyplot.ylabel('Rotation Rate (deg/s)')
 axis_labels = ['X-Axis', 'Y-Axis', 'Z-Axis']
 pyplot.legend(axis_labels)
 
-
-pyplot.subplot(133)
+pyplot.figure(2)
+pyplot.subplot(121)
 pyplot.title('Altitude vs. Time', fontsize=15, weight='bold')
 pyplot.plot(t, alt)
 pyplot.xlabel('Time (s)')
 pyplot.ylabel('Altitude (m)')
+
+
+pyplot.subplot(122)
+pyplot.title('Temperature vs. Time', fontsize=15, weight='bold')
+pyplot.plot(t, temp)
+pyplot.xlabel('Time (s)')
+pyplot.ylabel('Temperature (deg C)')
 pyplot.show()

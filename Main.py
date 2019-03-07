@@ -58,8 +58,8 @@ def main():
     # I. Program initialization
     # Define initialization variables
     # ubl = navio.ublox.UBlox("spi:0.0", baudrate=5000000, timeout=0)
-    baro = mdl3115a2.MDL3115A2(busID=1, slaveAddr=0x60)
-
+    baro = mdl3115a2.MDL3115A2(busID=1, slaveAddr=0x60, sea_level_pressure=1012.0)
+    acc = adxl377.ADXL377(busID=1, slaveAddr=0x48)
     # Initialize the sensors
     IMU.initIMU()
 
@@ -78,6 +78,7 @@ def main():
     fp.write(header_1)
     fp.close()
 
+    time.sleep(1)
     cal_led.off()
     # II. Main Loop
 
@@ -86,10 +87,10 @@ def main():
         status_led(check_led)                       # Flash status LED
         flt_params = read_flt_params(baro, IMU)     # Get the flight parameters
 
-        launch_indicator = check_launch(launch_indicator,flt_params, cal_led)
+        launch_indicator = check_launch(launch_indicator, flt_params, cal_led)
 
         if launch_indicator:
-            flt_params.append(str('launch'))
+            #flt_params.append(str('launch'))
             launch_indicator = False
 
         write_to_file(filename, flt_params)  # Append parameters to file
@@ -111,10 +112,9 @@ def read_flt_params(baro, IMU):
     MAGz = float(imu_data[8])
     temp = float(baro_data[0])
     pres = float(baro_data[1])
-    alt = float(baro_data[2])
+    alt = int(baro_data[2])
 
-    t = '{:.2f}'.format(time.time())
-    t = float(t)
+    t = float('{:.2f}'.format(time.time()))
     output = [g_counter, t, ACCx, ACCy, ACCz, GRYx, GRYy, GRYz, MAGx, MAGy, MAGz, temp, pres, alt]
     return output
 
@@ -135,7 +135,7 @@ def write_to_file(filename, flt_params):
     # Input: flight parameters
     # Output: none
     fp = open(filename, 'a+')
-    fp.write(str(flt_params) + str('\n'))
+    fp.write(str(flt_params) + '\n')
     fp.close()
 
 
@@ -179,6 +179,7 @@ def check_launch(launch_indicator, flt_params, led):
 
 
 start = time.time()
+
 # Execute `main()` function
 if __name__ == '__main__':
     try:
@@ -192,6 +193,3 @@ if __name__ == '__main__':
         fp = open("Traceback_Log.txt", "a")
         fp.write(s + "\n")
         fp.close()
-
-
-print('EOF -------------------------\n')
