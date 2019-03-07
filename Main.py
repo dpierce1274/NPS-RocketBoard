@@ -33,7 +33,7 @@ import time
 import argparse
 import sys
 import math
-import mdl3115a2
+import mpl3115a2
 import adxl377
 import serial
 import subprocess
@@ -59,7 +59,7 @@ def main():
     # I. Program initialization
     # Define initialization variables
     # ubl = navio.ublox.UBlox("spi:0.0", baudrate=5000000, timeout=0)
-    baro = mdl3115a2.MDL3115A2(busID=1, slaveAddr=0x60, sea_level_pressure=1012.0)
+    baro = mpl3115a2.MPL3115A2(busID=1, slaveAddr=0x60, sea_level_pressure=1012.0)
     acc = adxl377.ADXL377(busID=1, slaveAddr=0x48)
     # Initialize the sensors
     IMU.initIMU()

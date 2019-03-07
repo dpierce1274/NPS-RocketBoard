@@ -81,7 +81,7 @@ OFF_H = 0x2D
 
 
 
-class MDL3115A2(object):
+class MPL3115A2(object):
 
     def __init__(self, busID, slaveAddr, sea_level_pressure):
         self.__i2c = smbus.SMBus(busID)                                 # Set busid equal to user input ID
