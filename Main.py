@@ -34,6 +34,7 @@ import argparse
 import sys
 import math
 import mdl3115a2
+import adxl377
 import serial
 import subprocess
 import shlex
@@ -72,8 +73,8 @@ def main():
     # Create data file and write header #
     tstr = time.strftime('%Y-%m-%d_%H-%M-%S-%Z.txt')
     filename = str('Flight Data ') + tstr
-    header_1 = str('Counter, Time, ACCx, ACCy, ACCz, GRYx, GRYy, GRYz, MAGx, MAGy, MAGz, Temp(C), Pres(mbar), '
-                   'Alt (m) \n')
+    header_1 = str('Counter, Time, ACCx, ACCy, ACCz, accx, accy, accz, GRYx, GRYy, GRYz, MAGx, MAGy, MAGz, '
+                   'Temp(C), Pres(mbar), Alt (m) \n')
     fp = open(filename, 'w+')
     fp.write(header_1)
     fp.close()
@@ -85,7 +86,7 @@ def main():
     while True:
         g_counter += 1
         status_led(check_led)                       # Flash status LED
-        flt_params = read_flt_params(baro, IMU)     # Get the flight parameters
+        flt_params = read_flt_params(baro, IMU, acc)     # Get the flight parameters
 
         launch_indicator = check_launch(launch_indicator, flt_params, cal_led)
 
@@ -96,14 +97,18 @@ def main():
         write_to_file(filename, flt_params)  # Append parameters to file
 
 
-def read_flt_params(baro, IMU):
+def read_flt_params(baro, IMU, acc):
     global g_counter
 
     baro_data = baro.get_barometer_data()
     imu_data = IMU.get_IMU_data()
+    acc_data = acc.get_accel_values()
     ACCx = float(imu_data[0])
     ACCy = float(imu_data[1])
     ACCz = float(imu_data[2])
+    accx = float(acc_data[0])
+    accy = float(acc_data[1])
+    accz = float(acc_data[2])
     GRYx = float(imu_data[3])
     GRYy = float(imu_data[4])
     GRYz = float(imu_data[5])
@@ -115,7 +120,7 @@ def read_flt_params(baro, IMU):
     alt = int(baro_data[2])
 
     t = float('{:.2f}'.format(time.time()))
-    output = [g_counter, t, ACCx, ACCy, ACCz, GRYx, GRYy, GRYz, MAGx, MAGy, MAGz, temp, pres, alt]
+    output = [g_counter, t, ACCx, ACCy, ACCz, accx, accy, accz, GRYx, GRYy, GRYz, MAGx, MAGy, MAGz, temp, pres, alt]
     return output
 
 
