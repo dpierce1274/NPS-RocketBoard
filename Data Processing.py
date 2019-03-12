@@ -1,7 +1,7 @@
 import matplotlib.pyplot as pyplot
 from tkinter import Tk
 from tkinter import filedialog
-
+import sys
 
 pyplot.rcParams['font.sans-serif'] = "Times New Roman"
 pyplot.rcParams['font.family'] = "sans-serif"
@@ -93,3 +93,4 @@ pyplot.plot(t, temp)
 pyplot.xlabel('Time (s)')
 pyplot.ylabel('Temperature (deg C)')
 pyplot.show()
+
