@@ -38,6 +38,8 @@ x_step = (x_max-x_min)/2
 y_step = (y_max-y_min)/2
 z_step = (z_max-z_min)/2
 
+general_step = 0.0065           # volts/g per documentation
+
 class ADXL377(object):
 
     def __init__(self, busID, slaveAddr):
@@ -52,11 +54,11 @@ class ADXL377(object):
         raw_value = struct.unpack('>H', struct.pack('>BB', data[0], data[1]))[0]
         voltage = (raw_value / self.Max_AD) * v_ref
         if channel == channel_0:
-            g_value = (voltage - x_mean)/0.0065
+            g_value = (voltage - x_mean)/general_step
         if channel == channel_1:
-            g_value = (voltage - y_mean)/0.0065
+            g_value = (voltage - y_mean)/general_step
         if channel == channel_2:
-            g_value = (voltage - z_mean)/0.0065
+            g_value = (voltage - z_mean)/general_step
 
         return g_value
 
