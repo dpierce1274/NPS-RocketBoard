@@ -42,12 +42,12 @@ while True:
             if z_value < z_min:
                 z_min = z_value
 
-        print('X Max: {:.3f}'.format(x_max), 'Y Max: {:.3f}'.format(y_max), 'Z Max: {:.3f}'.format(z_max))
-        print('X Min: {:.3f}'.format(x_min), 'Y Min: {:.3f}'.format(y_min), 'Z Min: {:.3f}'.format(z_min))
+        print('X Max: {:.4f}'.format(x_max), 'Y Max: {:.4f}'.format(y_max), 'Z Max: {:.4f}'.format(z_max))
+        print('X Min: {:.4f}'.format(x_min), 'Y Min: {:.4f}'.format(y_min), 'Z Min: {:.4f}'.format(z_min))
 
     except KeyboardInterrupt:
         print('Final Calibration values:')
-        print('X Max: {:.3f}'.format(x_max), 'Y Max: {:.3f}'.format(y_max), 'Z Max: {:.3f}'.format(z_max))
-        print('X Min: {:.3f}'.format(x_min), 'Y Min: {:.3f}'.format(y_min), 'Z Min: {:.3f}'.format(z_min))
+        print('X Max: {:.4f}'.format(x_max), 'Y Max: {:.4f}'.format(y_max), 'Z Max: {:.4f}'.format(z_max))
+        print('X Min: {:.4f}'.format(x_min), 'Y Min: {:.4f}'.format(y_min), 'Z Min: {:.4f}'.format(z_min))
         sys.exit()
 

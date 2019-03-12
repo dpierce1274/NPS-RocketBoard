@@ -20,7 +20,23 @@ v_ref = 2.5
 sd = 1       # Single-ended input
 pd1 = 1      # Internal reference ON
 pd0 = 1      # A/D Converter ON
+g_value = 0  # Initial G reading
 
+# Accelerometer calibration values
+x_min = 1.4368
+y_min = 1.5399
+z_min = 1.4178
+x_max = 1.4642
+y_max = 1.6296
+z_max = 1.4746
+
+x_mean = (x_max+x_min)/2
+y_mean = (y_max+y_min)/2
+z_mean = (z_max+z_min)/2
+
+x_step = (x_max-x_min)/2
+y_step = (y_max-y_min)/2
+z_step = (z_max-z_min)/2
 
 class ADXL377(object):
 
@@ -35,8 +51,14 @@ class ADXL377(object):
         data = self.__i2c.read_i2c_block_data(self.__slave, command, 2)
         raw_value = struct.unpack('>H', struct.pack('>BB', data[0], data[1]))[0]
         voltage = (raw_value / self.Max_AD) * v_ref
-        g_value = voltage - (v_ref/2)
-        return voltage
+        if channel == channel_0:
+            g_value = (voltage - x_mean)/0.0065
+        if channel == channel_1:
+            g_value = (voltage - y_mean)/0.0065
+        if channel == channel_2:
+            g_value = (voltage - z_mean)/0.0065
+
+        return g_value
 
     def format_cmd_byte(self, channel):
         command = channel << 4 | 0x8C
