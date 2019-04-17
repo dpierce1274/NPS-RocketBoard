@@ -1,0 +1,135 @@
+<html>
+<head>
+<title>mpl3115a2.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+.s0 { color: rgb(128,128,128); font-style: italic; }
+.s1 { color: rgb(0,0,0); }
+.s2 { color: rgb(0,0,128); font-weight: bold; }
+.s3 { color: rgb(0,0,255); }
+.s4 { color: rgb(0,128,128); font-weight: bold; }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+mpl3115a2.py</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">''' 
+ 
+MIT License 
+ 
+Copyright (c) 2019 dpierce1274 
+ 
+Permission is hereby granted, free of charge, to any person obtaining a copy 
+of this software and associated documentation files (the &quot;Software&quot;), to deal 
+in the Software without restriction, including without limitation the rights 
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
+copies of the Software, and to permit persons to whom the Software is 
+furnished to do so, subject to the following conditions: 
+ 
+The above copyright notice and this permission notice shall be included in all 
+copies or substantial portions of the Software. 
+ 
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
+SOFTWARE. 
+ 
+'''</span><span class="s1"> 
+ 
+</span><span class="s2">import </span><span class="s1">smbus 
+</span><span class="s2">import </span><span class="s1">time 
+ 
+</span><span class="s0"># Register Address Map</span><span class="s1"> 
+STATUS          = </span><span class="s3">0x00</span><span class="s1"> 
+OUT_P_MSB       = </span><span class="s3">0x01</span><span class="s1"> 
+OUT_P_CSB       = </span><span class="s3">0x02</span><span class="s1"> 
+OUT_P_LSB       = </span><span class="s3">0x03</span><span class="s1"> 
+OUT_T_MSB       = </span><span class="s3">0x04</span><span class="s1"> 
+OUT_T_LSB       = </span><span class="s3">0x05</span><span class="s1"> 
+DR_STATUS       = </span><span class="s3">0x06</span><span class="s1"> 
+OUT_P_DELTA_MSB = </span><span class="s3">0x07</span><span class="s1"> 
+OUT_P_DELTA_CSB = </span><span class="s3">0x08</span><span class="s1"> 
+OUT_P_DELTA_LSB = </span><span class="s3">0x09</span><span class="s1"> 
+OUT_T_DELTA_MSB = </span><span class="s3">0x0A</span><span class="s1"> 
+OUT_T_DELTA_LSB = </span><span class="s3">0x0B</span><span class="s1"> 
+WHO_AM_I        = </span><span class="s3">0x0C</span><span class="s1"> 
+F_STATUS        = </span><span class="s3">0x0D</span><span class="s1"> 
+F_DATA          = </span><span class="s3">0x0E</span><span class="s1"> 
+F_SETUP         = </span><span class="s3">0x0F</span><span class="s1"> 
+TIME_DLY        = </span><span class="s3">0x10</span><span class="s1"> 
+SYSMOD          = </span><span class="s3">0x11</span><span class="s1"> 
+INT_SOURCE      = </span><span class="s3">0x12</span><span class="s1"> 
+PT_DATA_CFG     = </span><span class="s3">0x13</span><span class="s1"> 
+BAR_IN_MSB      = </span><span class="s3">0x14</span><span class="s1"> 
+BAR_IN_LSB      = </span><span class="s3">0x15</span><span class="s1"> 
+P_TGT_MSB       = </span><span class="s3">0x16</span><span class="s1"> 
+P_TGT_LSB       = </span><span class="s3">0x17</span><span class="s1"> 
+T_TGT           = </span><span class="s3">0x18</span><span class="s1"> 
+P_WND_MSB       = </span><span class="s3">0x19</span><span class="s1"> 
+P_WND_LSB       = </span><span class="s3">0x1A</span><span class="s1"> 
+T_WND           = </span><span class="s3">0x1B</span><span class="s1"> 
+P_MIN_MSB       = </span><span class="s3">0x1C</span><span class="s1"> 
+P_MIN_CSB       = </span><span class="s3">0x1D</span><span class="s1"> 
+P_MIN_LSB       = </span><span class="s3">0x1E</span><span class="s1"> 
+T_MIN_MSB       = </span><span class="s3">0x1F</span><span class="s1"> 
+T_MIN_LSB       = </span><span class="s3">0x20</span><span class="s1"> 
+P_MAX_MSB       = </span><span class="s3">0x21</span><span class="s1"> 
+P_MAX_CSB       = </span><span class="s3">0x22</span><span class="s1"> 
+P_MAX_LSB       = </span><span class="s3">0x23</span><span class="s1"> 
+T_MAX_MSB       = </span><span class="s3">0x24</span><span class="s1"> 
+T_MAX_LSB       = </span><span class="s3">0x25</span><span class="s1"> 
+ 
+</span><span class="s0"># Control Registers</span><span class="s1"> 
+CTRL_REG1 = </span><span class="s3">0x26</span><span class="s1"> 
+CTRL_REG2 = </span><span class="s3">0x27</span><span class="s1"> 
+CTRL_REG3 = </span><span class="s3">0x28</span><span class="s1"> 
+CTRL_REG4 = </span><span class="s3">0x29</span><span class="s1"> 
+CTRL_REG5 = </span><span class="s3">0x2A</span><span class="s1"> 
+ 
+</span><span class="s0"># Data Offsets</span><span class="s1"> 
+OFF_P = </span><span class="s3">0x2B</span><span class="s1"> 
+OFF_T = </span><span class="s3">0x2C</span><span class="s1"> 
+OFF_H = </span><span class="s3">0x2D</span><span class="s1"> 
+ 
+ 
+ 
+</span><span class="s2">class </span><span class="s1">MPL3115A2(object): 
+ 
+    </span><span class="s2">def </span><span class="s1">__init__(self, busID, slaveAddr, sea_level_pressure): 
+        self.__i2c = smbus.SMBus(busID)                                 </span><span class="s0"># Set busid equal to user input ID</span><span class="s1"> 
+        self.__slave = slaveAddr                                        </span><span class="s0"># Take given slave address</span><span class="s1"> 
+        self.__sea_level_pressure = sea_level_pressure                  </span><span class="s0"># Updated sea_level_pressure value (mbar)</span><span class="s1"> 
+ 
+        </span><span class="s0"># No FIFO setup (Polling)</span><span class="s1"> 
+        self.__i2c.write_byte_data(self.__slave, CTRL_REG1, </span><span class="s3">0x38</span><span class="s1">)       </span><span class="s0"># Set Barometer standby mode with OSR 128</span><span class="s1"> 
+        self.__i2c.write_byte_data(self.__slave, PT_DATA_CFG, </span><span class="s3">0x07</span><span class="s1">)     </span><span class="s0"># Enable Data Flags</span><span class="s1"> 
+        self.__i2c.write_byte_data(self.__slave, CTRL_REG1, </span><span class="s3">0x39</span><span class="s1">)       </span><span class="s0"># Set Barometer active mode with OSR 128</span><span class="s1"> 
+        time.sleep(</span><span class="s3">1</span><span class="s1">)                                                   </span><span class="s0"># Allow sensor to enter active mode</span><span class="s1"> 
+ 
+    </span><span class="s2">def </span><span class="s1">get_barometer_data(self): 
+        </span><span class="s0"># Read Registers</span><span class="s1"> 
+        out_p_msb = self.__i2c.read_byte_data(self.__slave, OUT_P_MSB) 
+        out_p_csb = self.__i2c.read_byte_data(self.__slave, OUT_P_CSB) 
+        out_p_lsb = self.__i2c.read_byte_data(self.__slave, OUT_P_LSB) 
+        out_t_msb = self.__i2c.read_byte_data(self.__slave, OUT_T_MSB) 
+        out_t_lsb = self.__i2c.read_byte_data(self.__slave, OUT_T_MSB) 
+        </span><span class="s0"># Format Data</span><span class="s1"> 
+        pres = (out_p_msb &lt;&lt; </span><span class="s3">16 </span><span class="s1">| out_p_csb &lt;&lt; </span><span class="s3">8 </span><span class="s1">| out_p_lsb &amp; </span><span class="s3">0xF0</span><span class="s1">) / </span><span class="s3">64.0   </span><span class="s0"># Convert pres data to 20-bit unsigned</span><span class="s1"> 
+        pres_mbar = pres / </span><span class="s3">100.0                                              </span><span class="s0"># Convert pressure value to mbar</span><span class="s1"> 
+        temp = (out_t_msb &lt;&lt; </span><span class="s3">8 </span><span class="s1">| out_t_lsb &amp; </span><span class="s3">0xF0</span><span class="s1">) / </span><span class="s3">256.0      </span><span class="s0"># Convert temp data to 12-bit two's complement</span><span class="s1"> 
+        </span><span class="s0"># Compute Altitude</span><span class="s1"> 
+        alt = </span><span class="s3">44330.77</span><span class="s1">*(</span><span class="s3">1</span><span class="s1">-(pres_mbar/ 
+                           self.__sea_level_pressure)**</span><span class="s3">0.1902632</span><span class="s1">)       </span><span class="s0"># Compute altitude from documentation formula</span><span class="s1"> 
+ 
+        </span><span class="s0"># Return Values</span><span class="s1"> 
+        </span><span class="s2">return </span><span class="s4">'{:.2f}'</span><span class="s1">.format(temp), </span><span class="s4">'{:.2f}'</span><span class="s1">.format(pres_mbar), </span><span class="s4">'{:.0f}'</span><span class="s1">.format(alt)</span></pre>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<html>
+<head>
+<title>LSM9DS1.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+.s0 { color: rgb(128,128,128); font-style: italic; }
+.s1 { color: rgb(0,0,0); }
+.s2 { color: rgb(0,0,255); }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+LSM9DS1.py</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">''' 
+ 
+MIT License 
+ 
+Copyright (c) 2019 dpierce1274 
+ 
+Permission is hereby granted, free of charge, to any person obtaining a copy 
+of this software and associated documentation files (the &quot;Software&quot;), to deal 
+in the Software without restriction, including without limitation the rights 
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
+copies of the Software, and to permit persons to whom the Software is 
+furnished to do so, subject to the following conditions: 
+ 
+The above copyright notice and this permission notice shall be included in all 
+copies or substantial portions of the Software. 
+ 
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
+SOFTWARE. 
+ 
+'''</span><span class="s1"> 
+ 
+LSM9DS1_MAG_ADDRESS = </span><span class="s2">0x1E</span><span class="s1"> 
+LSM9DS1_ACC_ADDRESS = </span><span class="s2">0x6B</span><span class="s1"> 
+LSM9DS1_GYR_ADDRESS = </span><span class="s2">0x6B</span><span class="s1"> 
+ 
+ 
+</span><span class="s0">#/////////////////////////////////////////</span><span class="s1"> 
+</span><span class="s0">#// LSM9DS1 Accel/Gyro (XL/G) Registers //</span><span class="s1"> 
+</span><span class="s0">#/////////////////////////////////////////</span><span class="s1"> 
+LSM9DS1_ACT_THS             = </span><span class="s2">0x04</span><span class="s1"> 
+LSM9DS1_ACT_DUR             = </span><span class="s2">0x05</span><span class="s1"> 
+LSM9DS1_INT_GEN_CFG_XL      = </span><span class="s2">0x06</span><span class="s1"> 
+LSM9DS1_INT_GEN_THS_X_XL    = </span><span class="s2">0x07</span><span class="s1"> 
+LSM9DS1_INT_GEN_THS_Y_XL    = </span><span class="s2">0x08</span><span class="s1"> 
+LSM9DS1_INT_GEN_THS_Z_XL    = </span><span class="s2">0x09</span><span class="s1"> 
+LSM9DS1_INT_GEN_DUR_XL      = </span><span class="s2">0x0A</span><span class="s1"> 
+LSM9DS1_REFERENCE_G         = </span><span class="s2">0x0B</span><span class="s1"> 
+LSM9DS1_INT1_CTRL           = </span><span class="s2">0x0C</span><span class="s1"> 
+LSM9DS1_INT2_CTRL           = </span><span class="s2">0x0D</span><span class="s1"> 
+LSM9DS1_WHO_AM_I_XG         = </span><span class="s2">0x0F</span><span class="s1"> 
+LSM9DS1_CTRL_REG1_G         = </span><span class="s2">0x10</span><span class="s1"> 
+LSM9DS1_CTRL_REG2_G         = </span><span class="s2">0x11</span><span class="s1"> 
+LSM9DS1_CTRL_REG3_G         = </span><span class="s2">0x12</span><span class="s1"> 
+LSM9DS1_ORIENT_CFG_G        = </span><span class="s2">0x13</span><span class="s1"> 
+LSM9DS1_INT_GEN_SRC_G       = </span><span class="s2">0x14</span><span class="s1"> 
+LSM9DS1_OUT_TEMP_L          = </span><span class="s2">0x15</span><span class="s1"> 
+LSM9DS1_OUT_TEMP_H          = </span><span class="s2">0x16</span><span class="s1"> 
+LSM9DS1_STATUS_REG_0        = </span><span class="s2">0x17</span><span class="s1"> 
+LSM9DS1_OUT_X_L_G           = </span><span class="s2">0x18</span><span class="s1"> 
+LSM9DS1_OUT_X_H_G           = </span><span class="s2">0x19</span><span class="s1"> 
+LSM9DS1_OUT_Y_L_G           = </span><span class="s2">0x1A</span><span class="s1"> 
+LSM9DS1_OUT_Y_H_G           = </span><span class="s2">0x1B</span><span class="s1"> 
+LSM9DS1_OUT_Z_L_G           = </span><span class="s2">0x1C</span><span class="s1"> 
+LSM9DS1_OUT_Z_H_G           = </span><span class="s2">0x1D</span><span class="s1"> 
+LSM9DS1_CTRL_REG4           = </span><span class="s2">0x1E</span><span class="s1"> 
+LSM9DS1_CTRL_REG5_XL        = </span><span class="s2">0x1F</span><span class="s1"> 
+LSM9DS1_CTRL_REG6_XL        = </span><span class="s2">0x20</span><span class="s1"> 
+LSM9DS1_CTRL_REG7_XL        = </span><span class="s2">0x21</span><span class="s1"> 
+LSM9DS1_CTRL_REG8           = </span><span class="s2">0x22</span><span class="s1"> 
+LSM9DS1_CTRL_REG9           = </span><span class="s2">0x23</span><span class="s1"> 
+LSM9DS1_CTRL_REG10          = </span><span class="s2">0x24</span><span class="s1"> 
+LSM9DS1_INT_GEN_SRC_XL      = </span><span class="s2">0x26</span><span class="s1"> 
+LSM9DS1_STATUS_REG_1        = </span><span class="s2">0x27</span><span class="s1"> 
+LSM9DS1_OUT_X_L_XL          = </span><span class="s2">0x28</span><span class="s1"> 
+LSM9DS1_OUT_X_H_XL          = </span><span class="s2">0x29</span><span class="s1"> 
+LSM9DS1_OUT_Y_L_XL          = </span><span class="s2">0x2A</span><span class="s1"> 
+LSM9DS1_OUT_Y_H_XL          = </span><span class="s2">0x2B</span><span class="s1"> 
+LSM9DS1_OUT_Z_L_XL          = </span><span class="s2">0x2C</span><span class="s1"> 
+LSM9DS1_OUT_Z_H_XL          = </span><span class="s2">0x2D</span><span class="s1"> 
+LSM9DS1_FIFO_CTRL           = </span><span class="s2">0x2E</span><span class="s1"> 
+LSM9DS1_FIFO_SRC            = </span><span class="s2">0x2F</span><span class="s1"> 
+LSM9DS1_INT_GEN_CFG_G       = </span><span class="s2">0x30</span><span class="s1"> 
+LSM9DS1_INT_GEN_THS_XH_G    = </span><span class="s2">0x31</span><span class="s1"> 
+LSM9DS1_INT_GEN_THS_XL_G    = </span><span class="s2">0x32</span><span class="s1"> 
+LSM9DS1_INT_GEN_THS_YH_G    = </span><span class="s2">0x33</span><span class="s1"> 
+LSM9DS1_INT_GEN_THS_YL_G    = </span><span class="s2">0x34</span><span class="s1"> 
+LSM9DS1_INT_GEN_THS_ZH_G    = </span><span class="s2">0x35</span><span class="s1"> 
+LSM9DS1_INT_GEN_THS_ZL_G    = </span><span class="s2">0x36</span><span class="s1"> 
+LSM9DS1_INT_GEN_DUR_G       = </span><span class="s2">0x37</span><span class="s1"> 
+ 
+</span><span class="s0">#///////////////////////////////</span><span class="s1"> 
+</span><span class="s0">#// LSM9DS1 Magneto Registers //</span><span class="s1"> 
+</span><span class="s0">#///////////////////////////////</span><span class="s1"> 
+LSM9DS1_OFFSET_X_REG_L_M    = </span><span class="s2">0x05</span><span class="s1"> 
+LSM9DS1_OFFSET_X_REG_H_M    = </span><span class="s2">0x06</span><span class="s1"> 
+LSM9DS1_OFFSET_Y_REG_L_M    = </span><span class="s2">0x07</span><span class="s1"> 
+LSM9DS1_OFFSET_Y_REG_H_M    = </span><span class="s2">0x08</span><span class="s1"> 
+LSM9DS1_OFFSET_Z_REG_L_M    = </span><span class="s2">0x09</span><span class="s1"> 
+LSM9DS1_OFFSET_Z_REG_H_M    = </span><span class="s2">0x0A</span><span class="s1"> 
+LSM9DS1_WHO_AM_I_M          = </span><span class="s2">0x0F</span><span class="s1"> 
+LSM9DS1_CTRL_REG1_M         = </span><span class="s2">0x20</span><span class="s1"> 
+LSM9DS1_CTRL_REG2_M         = </span><span class="s2">0x21</span><span class="s1"> 
+LSM9DS1_CTRL_REG3_M         = </span><span class="s2">0x22</span><span class="s1"> 
+LSM9DS1_CTRL_REG4_M         = </span><span class="s2">0x23</span><span class="s1"> 
+LSM9DS1_CTRL_REG5_M         = </span><span class="s2">0x24</span><span class="s1"> 
+LSM9DS1_STATUS_REG_M        = </span><span class="s2">0x27</span><span class="s1"> 
+LSM9DS1_OUT_X_L_M           = </span><span class="s2">0x28</span><span class="s1"> 
+LSM9DS1_OUT_X_H_M           = </span><span class="s2">0x29</span><span class="s1"> 
+LSM9DS1_OUT_Y_L_M           = </span><span class="s2">0x2A</span><span class="s1"> 
+LSM9DS1_OUT_Y_H_M           = </span><span class="s2">0x2B</span><span class="s1"> 
+LSM9DS1_OUT_Z_L_M           = </span><span class="s2">0x2C</span><span class="s1"> 
+LSM9DS1_OUT_Z_H_M           = </span><span class="s2">0x2D</span><span class="s1"> 
+LSM9DS1_INT_CFG_M           = </span><span class="s2">0x30</span><span class="s1"> 
+LSM9DS1_INT_SRC_M           = </span><span class="s2">0x30</span><span class="s1"> 
+LSM9DS1_INT_THS_L_M         = </span><span class="s2">0x32</span><span class="s1"> 
+LSM9DS1_INT_THS_H_M         = </span><span class="s2">0x33</span><span class="s1"> 
+ 
+</span><span class="s0">#////////////////////////////////</span><span class="s1"> 
+</span><span class="s0">#// LSM9DS1 WHO_AM_I Responses //</span><span class="s1"> 
+</span><span class="s0">#////////////////////////////////</span><span class="s1"> 
+LSM9DS1_WHO_AM_I_AG_RSP     = </span><span class="s2">0x68</span><span class="s1"> 
+LSM9DS1_WHO_AM_I_M_RSP      = </span><span class="s2">0x3D</span><span class="s1"> 
+</span></pre>
+</body>
+</html>

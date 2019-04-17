@@ -24,20 +24,10 @@ SOFTWARE.
 
 '''
 
-
-import os
-import platform
-import datetime
-import spidev
 import time
-import argparse
 import sys
-import math
 import mpl3115a2
 import adxl377
-import serial
-import subprocess
-import shlex
 import traceback
 import IMU
 from gpiozero import LED
@@ -75,7 +65,7 @@ def main():
     filename = str('Flight Data ') + tstr
     header_1 = str('Counter, Time, ACCx, ACCy, ACCz, accx, accy, accz, GRYx, GRYy, GRYz, MAGx, MAGy, MAGz, '
                    'Temp(C), Pres(mbar), Alt (m) \n')
-    fp = open(filename, 'w+')
+    fp = open(filename, 'a')
     fp.write(header_1)
     fp.close()
 

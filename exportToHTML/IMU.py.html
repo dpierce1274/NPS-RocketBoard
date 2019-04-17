@@ -1,0 +1,182 @@
+<html>
+<head>
+<title>IMU.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+.s0 { color: rgb(128,128,128); font-style: italic; }
+.s1 { color: rgb(0,0,0); }
+.s2 { color: rgb(0,0,128); font-weight: bold; }
+.s3 { color: rgb(0,0,255); }
+.s4 { color: rgb(0,128,128); font-weight: bold; }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+IMU.py</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">&quot;&quot;&quot; 
+MIT License 
+ 
+Copyright (c) 2019 dpierce1274 
+ 
+Permission is hereby granted, free of charge, to any person obtaining a copy 
+of this software and associated documentation files (the &quot;Software&quot;), to deal 
+in the Software without restriction, including without limitation the rights 
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
+copies of the Software, and to permit persons to whom the Software is 
+furnished to do so, subject to the following conditions: 
+ 
+The above copyright notice and this permission notice shall be included in all 
+copies or substantial portions of the Software. 
+ 
+THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
+SOFTWARE. 
+&quot;&quot;&quot;</span><span class="s1"> 
+ 
+</span><span class="s2">import </span><span class="s1">smbus 
+</span><span class="s2">import </span><span class="s1">time 
+ 
+bus = smbus.SMBus(</span><span class="s3">1</span><span class="s1">) 
+</span><span class="s2">from </span><span class="s1">LSM9DS1 </span><span class="s2">import </span><span class="s1">* 
+ 
+ 
+LSM9DS0 = </span><span class="s3">1</span><span class="s1"> 
+gain = </span><span class="s3">0.07         </span><span class="s0"># Gyro Gain based on init setting</span><span class="s1"> 
+ 
+</span><span class="s2">def </span><span class="s1">detectIMU(): 
+    </span><span class="s2">try</span><span class="s1">: 
+        </span><span class="s0"># Check for LSM9DS1</span><span class="s1"> 
+        </span><span class="s0"># If no LSM9DS1 is conencted, there will be an I2C bus error and the program will exit.</span><span class="s1"> 
+        </span><span class="s0"># This section of code stops this from happening.</span><span class="s1"> 
+        LSM9DS1_WHO_XG_response = (bus.read_byte_data(LSM9DS1_GYR_ADDRESS, LSM9DS1_WHO_AM_I_XG)) 
+        LSM9DS1_WHO_M_response = (bus.read_byte_data(LSM9DS1_MAG_ADDRESS, LSM9DS1_WHO_AM_I_M)) 
+ 
+    </span><span class="s2">except </span><span class="s1">IOError </span><span class="s2">as </span><span class="s1">f: 
+        print(</span><span class="s4">''</span><span class="s1">)  </span><span class="s0"># need to do something here, so we just print a space</span><span class="s1"> 
+    </span><span class="s2">else</span><span class="s1">: 
+        </span><span class="s2">if </span><span class="s1">(LSM9DS1_WHO_XG_response == </span><span class="s3">0x68</span><span class="s1">) </span><span class="s2">and </span><span class="s1">(LSM9DS1_WHO_M_response == </span><span class="s3">0x3d</span><span class="s1">): 
+            print(</span><span class="s4">&quot;Found LSM9DS1&quot;</span><span class="s1">) 
+ 
+    time.sleep(</span><span class="s3">1</span><span class="s1">) 
+ 
+ 
+</span><span class="s2">def </span><span class="s1">writeACC(register, value): 
+    bus.write_byte_data(LSM9DS1_ACC_ADDRESS, register, value) 
+    </span><span class="s2">return </span><span class="s1">-</span><span class="s3">1</span><span class="s1"> 
+ 
+ 
+</span><span class="s2">def </span><span class="s1">writeMAG(register, value): 
+    bus.write_byte_data(LSM9DS1_MAG_ADDRESS, register, value) 
+    </span><span class="s2">return </span><span class="s1">-</span><span class="s3">1</span><span class="s1"> 
+ 
+ 
+</span><span class="s2">def </span><span class="s1">writeGRY(register, value): 
+    bus.write_byte_data(LSM9DS1_GYR_ADDRESS, register, value) 
+    </span><span class="s2">return </span><span class="s1">-</span><span class="s3">1</span><span class="s1"> 
+ 
+ 
+</span><span class="s2">def </span><span class="s1">readACCx(): 
+    acc_l = bus.read_byte_data(LSM9DS1_ACC_ADDRESS, LSM9DS1_OUT_X_L_XL) 
+    acc_h = bus.read_byte_data(LSM9DS1_ACC_ADDRESS, LSM9DS1_OUT_X_H_XL) 
+    acc_combined = (acc_l | acc_h &lt;&lt; </span><span class="s3">8</span><span class="s1">) 
+    </span><span class="s2">return </span><span class="s1">acc_combined </span><span class="s2">if </span><span class="s1">acc_combined &lt; </span><span class="s3">32768 </span><span class="s2">else </span><span class="s1">acc_combined - </span><span class="s3">65536</span><span class="s1"> 
+ 
+ 
+</span><span class="s2">def </span><span class="s1">readACCy(): 
+    acc_l = bus.read_byte_data(LSM9DS1_ACC_ADDRESS, LSM9DS1_OUT_Y_L_XL) 
+    acc_h = bus.read_byte_data(LSM9DS1_ACC_ADDRESS, LSM9DS1_OUT_Y_H_XL) 
+    acc_combined = (acc_l | acc_h &lt;&lt; </span><span class="s3">8</span><span class="s1">) 
+    </span><span class="s2">return </span><span class="s1">acc_combined </span><span class="s2">if </span><span class="s1">acc_combined &lt; </span><span class="s3">32768 </span><span class="s2">else </span><span class="s1">acc_combined - </span><span class="s3">65536</span><span class="s1"> 
+ 
+ 
+</span><span class="s2">def </span><span class="s1">readACCz(): 
+    acc_l = bus.read_byte_data(LSM9DS1_ACC_ADDRESS, LSM9DS1_OUT_Z_L_XL) 
+    acc_h = bus.read_byte_data(LSM9DS1_ACC_ADDRESS, LSM9DS1_OUT_Z_H_XL) 
+    acc_combined = (acc_l | acc_h &lt;&lt; </span><span class="s3">8</span><span class="s1">) 
+    </span><span class="s2">return </span><span class="s1">acc_combined </span><span class="s2">if </span><span class="s1">acc_combined &lt; </span><span class="s3">32768 </span><span class="s2">else </span><span class="s1">acc_combined - </span><span class="s3">65536</span><span class="s1"> 
+ 
+ 
+</span><span class="s2">def </span><span class="s1">readMAGx(): 
+    mag_l = bus.read_byte_data(LSM9DS1_MAG_ADDRESS, LSM9DS1_OUT_X_L_M) 
+    mag_h = bus.read_byte_data(LSM9DS1_MAG_ADDRESS, LSM9DS1_OUT_X_H_M) 
+    mag_combined = (mag_l | mag_h &lt;&lt; </span><span class="s3">8</span><span class="s1">) 
+    </span><span class="s2">return </span><span class="s1">mag_combined </span><span class="s2">if </span><span class="s1">mag_combined &lt; </span><span class="s3">32768 </span><span class="s2">else </span><span class="s1">mag_combined - </span><span class="s3">65536</span><span class="s1"> 
+ 
+ 
+</span><span class="s2">def </span><span class="s1">readMAGy(): 
+    mag_l = bus.read_byte_data(LSM9DS1_MAG_ADDRESS, LSM9DS1_OUT_Y_L_M) 
+    mag_h = bus.read_byte_data(LSM9DS1_MAG_ADDRESS, LSM9DS1_OUT_Y_H_M) 
+    mag_combined = (mag_l | mag_h &lt;&lt; </span><span class="s3">8</span><span class="s1">) 
+    </span><span class="s2">return </span><span class="s1">mag_combined </span><span class="s2">if </span><span class="s1">mag_combined &lt; </span><span class="s3">32768 </span><span class="s2">else </span><span class="s1">mag_combined - </span><span class="s3">65536</span><span class="s1"> 
+ 
+ 
+</span><span class="s2">def </span><span class="s1">readMAGz(): 
+    mag_l = bus.read_byte_data(LSM9DS1_MAG_ADDRESS, LSM9DS1_OUT_Z_L_M) 
+    mag_h = bus.read_byte_data(LSM9DS1_MAG_ADDRESS, LSM9DS1_OUT_Z_H_M) 
+    mag_combined = (mag_l | mag_h &lt;&lt; </span><span class="s3">8</span><span class="s1">) 
+    </span><span class="s2">return </span><span class="s1">mag_combined </span><span class="s2">if </span><span class="s1">mag_combined &lt; </span><span class="s3">32768 </span><span class="s2">else </span><span class="s1">mag_combined - </span><span class="s3">65536</span><span class="s1"> 
+ 
+ 
+</span><span class="s2">def </span><span class="s1">readGYRx(): 
+    gyr_l = bus.read_byte_data(LSM9DS1_GYR_ADDRESS, LSM9DS1_OUT_X_L_G) 
+    gyr_h = bus.read_byte_data(LSM9DS1_GYR_ADDRESS, LSM9DS1_OUT_X_H_G) 
+    gyr_combined = (gyr_l | gyr_h &lt;&lt; </span><span class="s3">8</span><span class="s1">) 
+    </span><span class="s2">return </span><span class="s1">gyr_combined </span><span class="s2">if </span><span class="s1">gyr_combined &lt; </span><span class="s3">32768 </span><span class="s2">else </span><span class="s1">gyr_combined - </span><span class="s3">65536</span><span class="s1"> 
+ 
+ 
+</span><span class="s2">def </span><span class="s1">readGYRy(): 
+    gyr_l = bus.read_byte_data(LSM9DS1_GYR_ADDRESS, LSM9DS1_OUT_Y_L_G) 
+    gyr_h = bus.read_byte_data(LSM9DS1_GYR_ADDRESS, LSM9DS1_OUT_Y_H_G) 
+    gyr_combined = (gyr_l | gyr_h &lt;&lt; </span><span class="s3">8</span><span class="s1">) 
+    </span><span class="s2">return </span><span class="s1">gyr_combined </span><span class="s2">if </span><span class="s1">gyr_combined &lt; </span><span class="s3">32768 </span><span class="s2">else </span><span class="s1">gyr_combined - </span><span class="s3">65536</span><span class="s1"> 
+ 
+ 
+</span><span class="s2">def </span><span class="s1">readGYRz(): 
+    gyr_l = bus.read_byte_data(LSM9DS1_GYR_ADDRESS, LSM9DS1_OUT_Z_L_G) 
+    gyr_h = bus.read_byte_data(LSM9DS1_GYR_ADDRESS, LSM9DS1_OUT_Z_H_G) 
+    gyr_combined = (gyr_l | gyr_h &lt;&lt; </span><span class="s3">8</span><span class="s1">) 
+    </span><span class="s2">return </span><span class="s1">gyr_combined </span><span class="s2">if </span><span class="s1">gyr_combined &lt; </span><span class="s3">32768 </span><span class="s2">else </span><span class="s1">gyr_combined - </span><span class="s3">65536</span><span class="s1"> 
+ 
+ 
+</span><span class="s2">def </span><span class="s1">initIMU(): 
+ 
+        </span><span class="s0"># initialise the gyroscope</span><span class="s1"> 
+        writeGRY(LSM9DS1_CTRL_REG4, </span><span class="s3">0b00111000</span><span class="s1">)  </span><span class="s0"># z, y, x axis enabled for gyro</span><span class="s1"> 
+        writeGRY(LSM9DS1_CTRL_REG1_G, </span><span class="s3">0b10111000</span><span class="s1">)  </span><span class="s0"># Gyro ODR = 476Hz, 2000 dps</span><span class="s1"> 
+        writeGRY(LSM9DS1_ORIENT_CFG_G, </span><span class="s3">0b10111000</span><span class="s1">)  </span><span class="s0"># Swap orientation</span><span class="s1"> 
+ 
+        </span><span class="s0"># initialise the accelerometer</span><span class="s1"> 
+        writeACC(LSM9DS1_CTRL_REG5_XL, </span><span class="s3">0b00111000</span><span class="s1">)  </span><span class="s0"># z, y, x axis enabled for accelerometer</span><span class="s1"> 
+        writeACC(LSM9DS1_CTRL_REG6_XL, </span><span class="s3">0b00111000</span><span class="s1">)  </span><span class="s0"># +/- 8g</span><span class="s1"> 
+ 
+        </span><span class="s0"># initialise the magnetometer</span><span class="s1"> 
+        writeMAG(LSM9DS1_CTRL_REG1_M, </span><span class="s3">0b10011100</span><span class="s1">)  </span><span class="s0"># Temp compensation enabled,Low power mode mode,80Hz ODR</span><span class="s1"> 
+        writeMAG(LSM9DS1_CTRL_REG2_M, </span><span class="s3">0b01000000</span><span class="s1">)  </span><span class="s0"># +/-12gauss</span><span class="s1"> 
+        writeMAG(LSM9DS1_CTRL_REG3_M, </span><span class="s3">0b00000000</span><span class="s1">)  </span><span class="s0"># continuous update</span><span class="s1"> 
+        writeMAG(LSM9DS1_CTRL_REG4_M, </span><span class="s3">0b00000000</span><span class="s1">)  </span><span class="s0"># lower power mode for Z axis</span><span class="s1"> 
+ 
+ 
+</span><span class="s2">def </span><span class="s1">get_IMU_data(): 
+    ACCx = </span><span class="s4">'{:.2f}'</span><span class="s1">.format(readACCx()*</span><span class="s3">0.244</span><span class="s1">/</span><span class="s3">1000</span><span class="s1">) 
+    ACCy = </span><span class="s4">'{:.2f}'</span><span class="s1">.format(readACCy()*</span><span class="s3">0.244</span><span class="s1">/</span><span class="s3">1000</span><span class="s1">) 
+    ACCz = </span><span class="s4">'{:.2f}'</span><span class="s1">.format(readACCz()*</span><span class="s3">0.244</span><span class="s1">/</span><span class="s3">1000</span><span class="s1">) 
+    GRYx = </span><span class="s4">'{:.2f}'</span><span class="s1">.format(readGYRx()*gain) 
+    GRYy = </span><span class="s4">'{:.2f}'</span><span class="s1">.format(readGYRy()*gain) 
+    GRYz = </span><span class="s4">'{:.2f}'</span><span class="s1">.format(readGYRz()*gain) 
+    MAGx = </span><span class="s4">'{:.2f}'</span><span class="s1">.format(readMAGx()) 
+    MAGy = </span><span class="s4">'{:.2f}'</span><span class="s1">.format(readMAGy()) 
+    MAGz = </span><span class="s4">'{:.2f}'</span><span class="s1">.format(readMAGz()) 
+ 
+    </span><span class="s2">return </span><span class="s1">ACCx, ACCy, ACCz, GRYx, GRYy, GRYz, MAGx, MAGy, MAGz 
+</span></pre>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<html>
+<head>
+<title>adc.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { color: rgb(0,0,0); }
+.s2 { color: rgb(0,128,128); font-weight: bold; }
+.s3 { color: rgb(0,0,255); }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+adc.py</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">import </span><span class="s1">os.path 
+ 
+</span><span class="s0">class </span><span class="s1">ADC(): 
+    SYSFS_ADC_PATH_BASE = </span><span class="s2">&quot;/sys/kernel/rcio/adc/&quot;</span><span class="s1"> 
+    channel_count = </span><span class="s3">6</span><span class="s1"> 
+    channels = [] 
+ 
+    </span><span class="s0">def </span><span class="s1">__init__(self): 
+        </span><span class="s0">if not </span><span class="s1">os.path.exists(self.SYSFS_ADC_PATH_BASE): 
+            </span><span class="s0">raise </span><span class="s1">OSError(</span><span class="s2">&quot;rcio_adc module wasn't loaded&quot;</span><span class="s1">) 
+ 
+        self.channels = [open(self.SYSFS_ADC_PATH_BASE + </span><span class="s2">&quot;ch{}&quot;</span><span class="s1">.format(channel), </span><span class="s2">&quot;r&quot;</span><span class="s1">) </span><span class="s0">for </span><span class="s1">channel </span><span class="s0">in </span><span class="s1">range(self.channel_count)] 
+     
+    </span><span class="s0">def </span><span class="s1">read(self, ch): 
+        value = self.channels[ch].read() 
+        position = self.channels[ch].seek(</span><span class="s3">0</span><span class="s1">, </span><span class="s3">0</span><span class="s1">) 
+        </span><span class="s0">return </span><span class="s1">float(value[:-</span><span class="s3">1</span><span class="s1">]) 
+         
+</span></pre>
+</body>
+</html>

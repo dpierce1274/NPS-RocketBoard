@@ -7,7 +7,6 @@ Released under GNU GPL version 3 or later
 '''
 
 import struct
-from datetime import datetime
 import time, os
 import sys
 

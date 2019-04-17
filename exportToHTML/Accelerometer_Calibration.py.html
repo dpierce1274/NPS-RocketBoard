@@ -1,0 +1,75 @@
+<html>
+<head>
+<title>Accelerometer_Calibration.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { color: rgb(0,0,0); }
+.s2 { color: rgb(0,0,255); }
+.s3 { color: rgb(0,128,128); font-weight: bold; }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+Accelerometer_Calibration.py</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">import </span><span class="s1">adxl377 
+</span><span class="s0">import </span><span class="s1">time 
+</span><span class="s0">from </span><span class="s1">gpiozero </span><span class="s0">import </span><span class="s1">LED 
+</span><span class="s0">import </span><span class="s1">sys 
+ 
+acc = adxl377.ADXL377(busID=</span><span class="s2">1</span><span class="s1">, slaveAddr=</span><span class="s2">0x48</span><span class="s1">) 
+check_led = LED(</span><span class="s2">19</span><span class="s1">) 
+ 
+x_min = </span><span class="s2">3.0</span><span class="s1"> 
+y_min = </span><span class="s2">3.0</span><span class="s1"> 
+z_min = </span><span class="s2">3.0</span><span class="s1"> 
+x_max = </span><span class="s2">0.0</span><span class="s1"> 
+y_max = </span><span class="s2">0.0</span><span class="s1"> 
+z_max = </span><span class="s2">0.0</span><span class="s1"> 
+counter = </span><span class="s2">0.0</span><span class="s1"> 
+ 
+ 
+print(</span><span class="s3">'Calibration Commencing - Slowly rotate accelerometer about each axis when green light turns on'</span><span class="s1">) 
+time.sleep(</span><span class="s2">2</span><span class="s1">) 
+ 
+</span><span class="s0">while True</span><span class="s1">: 
+    </span><span class="s0">try</span><span class="s1">: 
+        counter += </span><span class="s2">1</span><span class="s1"> 
+        acc_data = acc.get_accel_values() 
+        x_value = float(acc_data[</span><span class="s2">0</span><span class="s1">]) 
+        y_value = float(acc_data[</span><span class="s2">1</span><span class="s1">]) 
+        z_value = float(acc_data[</span><span class="s2">2</span><span class="s1">]) 
+ 
+        </span><span class="s0">if </span><span class="s1">counter &gt; </span><span class="s2">100</span><span class="s1">: 
+            print(acc_data) 
+            check_led.on() 
+            </span><span class="s0">if </span><span class="s1">x_value &gt; x_max : 
+                x_max = x_value 
+            </span><span class="s0">if </span><span class="s1">x_value &lt; x_min: 
+                x_min = x_value 
+            </span><span class="s0">if </span><span class="s1">y_value &gt; y_max: 
+                y_max = y_value 
+            </span><span class="s0">if </span><span class="s1">y_value &lt; y_min: 
+                y_min = y_value 
+            </span><span class="s0">if </span><span class="s1">z_value &gt; z_max: 
+                z_max = z_value 
+            </span><span class="s0">if </span><span class="s1">z_value &lt; z_min: 
+                z_min = z_value 
+ 
+        print(</span><span class="s3">'X Max: {:.4f}'</span><span class="s1">.format(x_max), </span><span class="s3">'Y Max: {:.4f}'</span><span class="s1">.format(y_max), </span><span class="s3">'Z Max: {:.4f}'</span><span class="s1">.format(z_max)) 
+        print(</span><span class="s3">'X Min: {:.4f}'</span><span class="s1">.format(x_min), </span><span class="s3">'Y Min: {:.4f}'</span><span class="s1">.format(y_min), </span><span class="s3">'Z Min: {:.4f}'</span><span class="s1">.format(z_min)) 
+ 
+    </span><span class="s0">except </span><span class="s1">KeyboardInterrupt: 
+        print(</span><span class="s3">'Final Calibration values:'</span><span class="s1">) 
+        print(</span><span class="s3">'X Max: {:.4f}'</span><span class="s1">.format(x_max), </span><span class="s3">'Y Max: {:.4f}'</span><span class="s1">.format(y_max), </span><span class="s3">'Z Max: {:.4f}'</span><span class="s1">.format(z_max)) 
+        print(</span><span class="s3">'X Min: {:.4f}'</span><span class="s1">.format(x_min), </span><span class="s3">'Y Min: {:.4f}'</span><span class="s1">.format(y_min), </span><span class="s3">'Z Min: {:.4f}'</span><span class="s1">.format(z_min)) 
+        sys.exit() 
+ 
+</span></pre>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<html>
+<head>
+<title>adxl377.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { color: rgb(0,0,0); }
+.s2 { color: rgb(128,128,128); font-style: italic; }
+.s3 { color: rgb(0,0,255); }
+.s4 { color: rgb(0,128,128); font-weight: bold; }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+adxl377.py</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">from </span><span class="s1">smbus </span><span class="s0">import </span><span class="s1">SMBus 
+</span><span class="s0">import </span><span class="s1">struct 
+ 
+</span><span class="s2"># Analog Channel Input</span><span class="s1"> 
+channel_0 = </span><span class="s3">0b000</span><span class="s1"> 
+channel_1 = </span><span class="s3">0b100</span><span class="s1"> 
+channel_2 = </span><span class="s3">0b001</span><span class="s1"> 
+channel_3 = </span><span class="s3">0b101</span><span class="s1"> 
+channel_4 = </span><span class="s3">0b010</span><span class="s1"> 
+channel_5 = </span><span class="s3">0b110</span><span class="s1"> 
+channel_6 = </span><span class="s3">0b011</span><span class="s1"> 
+channel_7 = </span><span class="s3">0b111</span><span class="s1"> 
+ 
+</span><span class="s2"># Voltage Reference</span><span class="s1"> 
+v_ref = </span><span class="s3">2.5</span><span class="s1"> 
+ 
+</span><span class="s2"># Command Byte Values</span><span class="s1"> 
+</span><span class="s2"># Format: SD C2 C1 C0 PD1 PD0 X X</span><span class="s1"> 
+</span><span class="s2"># C2 C1 C0 = Channel Address</span><span class="s1"> 
+sd = </span><span class="s3">1       </span><span class="s2"># Single-ended input</span><span class="s1"> 
+pd1 = </span><span class="s3">1      </span><span class="s2"># Internal reference ON</span><span class="s1"> 
+pd0 = </span><span class="s3">1      </span><span class="s2"># A/D Converter ON</span><span class="s1"> 
+g_value = </span><span class="s3">0  </span><span class="s2"># Initial G reading</span><span class="s1"> 
+ 
+</span><span class="s2"># Accelerometer calibration values</span><span class="s1"> 
+x_min = </span><span class="s3">1.4368</span><span class="s1"> 
+y_min = </span><span class="s3">1.5399</span><span class="s1"> 
+z_min = </span><span class="s3">1.4178</span><span class="s1"> 
+x_max = </span><span class="s3">1.4642</span><span class="s1"> 
+y_max = </span><span class="s3">1.6296</span><span class="s1"> 
+z_max = </span><span class="s3">1.4746</span><span class="s1"> 
+ 
+x_mean = (x_max+x_min)/</span><span class="s3">2</span><span class="s1"> 
+y_mean = (y_max+y_min)/</span><span class="s3">2</span><span class="s1"> 
+z_mean = (z_max+z_min)/</span><span class="s3">2</span><span class="s1"> 
+ 
+x_step = (x_max-x_min)/</span><span class="s3">2</span><span class="s1"> 
+y_step = (y_max-y_min)/</span><span class="s3">2</span><span class="s1"> 
+z_step = (z_max-z_min)/</span><span class="s3">2</span><span class="s1"> 
+ 
+general_step = </span><span class="s3">0.0065           </span><span class="s2"># volts/g per documentation</span><span class="s1"> 
+ 
+</span><span class="s0">class </span><span class="s1">ADXL377(object): 
+ 
+    </span><span class="s0">def </span><span class="s1">__init__(self, busID, slaveAddr): 
+        self.__i2c = SMBus(busID) 
+        self.__slave = slaveAddr 
+ 
+    Max_AD = </span><span class="s3">4096.0                                 </span><span class="s2"># 12-bit ADC</span><span class="s1"> 
+ 
+    </span><span class="s0">def </span><span class="s1">read_channel(self, channel): 
+        command = self.format_cmd_byte(channel) 
+        data = self.__i2c.read_i2c_block_data(self.__slave, command, </span><span class="s3">2</span><span class="s1">) 
+        raw_value = struct.unpack(</span><span class="s4">'&gt;H'</span><span class="s1">, struct.pack(</span><span class="s4">'&gt;BB'</span><span class="s1">, data[</span><span class="s3">0</span><span class="s1">], data[</span><span class="s3">1</span><span class="s1">]))[</span><span class="s3">0</span><span class="s1">] 
+        voltage = (raw_value / self.Max_AD) * v_ref 
+        </span><span class="s0">if </span><span class="s1">channel == channel_0: 
+            g_value = (voltage - x_mean)/general_step 
+        </span><span class="s0">if </span><span class="s1">channel == channel_1: 
+            g_value = (voltage - y_mean)/general_step 
+        </span><span class="s0">if </span><span class="s1">channel == channel_2: 
+            g_value = (voltage - z_mean)/general_step 
+ 
+        </span><span class="s0">return </span><span class="s1">g_value 
+ 
+    </span><span class="s0">def </span><span class="s1">format_cmd_byte(self, channel): 
+        command = channel &lt;&lt; </span><span class="s3">4 </span><span class="s1">| </span><span class="s3">0x8C</span><span class="s1"> 
+        </span><span class="s0">return </span><span class="s1">command 
+ 
+    </span><span class="s0">def </span><span class="s1">get_accel_values(self): 
+        x_axis = self.read_channel(channel_0) 
+        y_axis = self.read_channel(channel_1) 
+        z_axis = self.read_channel(channel_2) 
+        </span><span class="s0">return </span><span class="s4">'{:.6f}'</span><span class="s1">.format(x_axis), </span><span class="s4">'{:.6f}'</span><span class="s1">.format(y_axis), </span><span class="s4">'{:.6f}'</span><span class="s1">.format(z_axis) 
+</span></pre>
+</body>
+</html>
