@@ -51,6 +51,7 @@ def main():
     # ubl = navio.ublox.UBlox("spi:0.0", baudrate=5000000, timeout=0)
     baro = mpl3115a2.MPL3115A2(busID=1, slaveAddr=0x60, sea_level_pressure=1012.0)
     acc = adxl377.ADXL377(busID=1, slaveAddr=0x48)
+    ser = serial.Serial(port='/dev/ttyAMA0', baudrate=9600, bytesize=8, parity='N', stopbits=1, timeout=0.01)
     # Initialize the sensors
     IMU.initIMU()
 
@@ -171,6 +172,25 @@ def check_launch(launch_indicator, flt_params, led):
     else:
         launch = False
     return launch
+
+
+def send_message(ser, message):
+    # This function formats and sends a telemetry message to the ground radio
+    # Inputs: message
+    # Outputs: none
+
+    ser.write('{:<100s}'.format('16 %d %s\r' % (int(time.time()), message)))
+    print('{:<100s}'.format('16 %d %s\n' % (int(time.time()), message)))
+
+
+def send_gps(ser, data):
+    # This function formats and sends a GPS telemetry message to the ground radio
+    # Inputs: GPS
+    # Outputs: none
+    msg = "{:>10d} {:>6s} {:>10d} {:>+9.5f} {:>+10.5f} deg {:>5d} m".format(data[0], data[1], int(data[2]), data[3],
+                                                                            data[4], int(data[5]))
+    ser.write('{:<100s}'.format('12 %s\r' % msg))
+    print('{:<100s}'.format('12 %s\n' % msg))
 
 
 start = time.time()
