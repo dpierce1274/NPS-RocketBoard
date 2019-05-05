@@ -56,10 +56,10 @@ def main():
     IMU.initIMU()
 
     # Configure the GPS messages
-    # ubl.configure_solution_rate(rate_ms=500)
-    # ubl.configure_message_rate(navio.ublox.CLASS_NAV, navio.ublox.MSG_NAV_POSLLH, 1)
-    # ubl.configure_message_rate(navio.ublox.CLASS_NAV, navio.ublox.MSG_NAV_STATUS, 1)
-    # ubl.configure_message_rate(navio.ublox.CLASS_NAV, navio.ublox.MSG_NAV_VELNED, 1)
+    ubl.configure_solution_rate(rate_ms=500)
+    ubl.configure_message_rate(navio.ublox.CLASS_NAV, navio.ublox.MSG_NAV_POSLLH, 1)
+    ubl.configure_message_rate(navio.ublox.CLASS_NAV, navio.ublox.MSG_NAV_STATUS, 1)
+    ubl.configure_message_rate(navio.ublox.CLASS_NAV, navio.ublox.MSG_NAV_VELNED, 1)
 
     # Create data file and write header #
     tstr = time.strftime('%Y-%m-%d_%H-%M-%S-%Z.txt')
@@ -75,17 +75,11 @@ def main():
     # II. Main Loop
 
     while True:
-        g_counter += 1
-        status_led(check_led)                       # Flash status LED
-        flt_params = read_flt_params(baro, IMU, acc)     # Get the flight parameters
+        g_counter += 1                                  # Iterate Counter
+        status_led(check_led)                           # Flash status LED
+        flt_params = read_flt_params(baro, IMU, acc)    # Get the flight parameters
 
-        launch_indicator = check_launch(launch_indicator, flt_params, cal_led)
-
-        if launch_indicator:
-            #flt_params.append(str('launch'))
-            launch_indicator = False
-
-        write_to_file(filename, flt_params)  # Append parameters to file
+        write_to_file(filename, flt_params)             # Append parameters to file
 
 
 def read_flt_params(baro, IMU, acc):
