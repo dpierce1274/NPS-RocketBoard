@@ -33,6 +33,8 @@ import IMU
 from gpiozero import LED
 import serial
 import ublox
+import subprocess
+import shlex
 
 g_counter = 0
 
@@ -50,19 +52,15 @@ def main():
 
     # I. Program initialization
     # Define initialization variables
-    # ubl = navio.ublox.UBlox("spi:0.0", baudrate=5000000, timeout=0)
     baro = mpl3115a2.MPL3115A2(busID=1, slaveAddr=0x60, sea_level_pressure=1012.0)
     acc = adxl377.ADXL377(busID=1, slaveAddr=0x48)
-    ser = serial.Serial(port='/dev/ttyAMA0', baudrate=9600, bytesize=8, parity='N', stopbits=1, timeout=0.01)
-    ubl = ublox.UBlox("spi:0.0", baudrate=5000000, timeout=0)
+
     # Initialize the sensors
     IMU.initIMU()
 
-    # Configure the GPS messages
-    ubl.configure_solution_rate(rate_ms=500)
-    ubl.configure_message_rate(ublox.CLASS_NAV, ublox.MSG_NAV_POSLLH, 1)
-    ubl.configure_message_rate(ublox.CLASS_NAV, ublox.MSG_NAV_STATUS, 1)
-    ubl.configure_message_rate(ublox.CLASS_NAV, ublox.MSG_NAV_VELNED, 1)
+    # Begin Telemetry Process
+    p_name = '/usr/bin/python Telemetry.py'
+    process = subprocess.Popen(shlex.split(p_name), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     # Create data file and write header #
     tstr = time.strftime('%Y-%m-%d_%H-%M-%S-%Z.txt')
@@ -156,38 +154,6 @@ def status_led(check_led):
         print('Main enabled')
     elif g_counter % 100 == 0:
         check_led.off()
-
-
-def check_launch(launch_indicator, flt_params, led):
-
-    if (abs(flt_params[2]) or abs(flt_params[3]) or abs(flt_params[4])) > 4:
-        print(abs(flt_params[2]), abs(flt_params[3]), abs(flt_params[4]))
-        launch = True
-        led.on()
-    elif launch_indicator:
-        launch = True
-    else:
-        launch = False
-    return launch
-
-
-def send_message(ser, message):
-    # This function formats and sends a telemetry message to the ground radio
-    # Inputs: message
-    # Outputs: none
-
-    ser.write('{:<100s}'.format('16 %d %s\r' % (int(time.time()), message)))
-    print('{:<100s}'.format('16 %d %s\n' % (int(time.time()), message)))
-
-
-def send_gps(ser, data):
-    # This function formats and sends a GPS telemetry message to the ground radio
-    # Inputs: GPS
-    # Outputs: none
-    msg = "{:>10d} {:>6s} {:>10d} {:>+9.5f} {:>+10.5f} deg {:>5d} m".format(data[0], data[1], int(data[2]), data[3],
-                                                                            data[4], int(data[5]))
-    ser.write('{:<100s}'.format('12 %s\r' % msg))
-    print('{:<100s}'.format('12 %s\n' % msg))
 
 
 start = time.time()
