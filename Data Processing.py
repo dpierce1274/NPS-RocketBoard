@@ -56,7 +56,7 @@ for line in fp.readlines():
 
 pyplot.subplot(131)
 pyplot.title('IMU Acceleration vs. Time', fontsize=15, weight='bold')
-pyplot.plot(t[0:1200], ACCx[0:1200], t[0:1200], ACCy[0:1200], t[0:1200], ACCz[0:1200], linewidth=1)
+pyplot.plot(t, ACCx, t, ACCy, t, ACCz, linewidth=1)
 pyplot.xlabel('Time (s)')
 pyplot.ylabel('Acceleration (Gs)')
 axis_labels = ['X-Axis', 'Y-Axis', 'Z-Axis']
@@ -65,7 +65,7 @@ pyplot.legend(axis_labels)
 
 pyplot.subplot(132)
 pyplot.title('ADXL377 Acceleration vs. Time', fontsize=15, weight='bold')
-pyplot.plot(t[0:1200], accx[0:1200], t[0:1200], accy[0:1200], t[0:1200], accz[0:1200], linewidth=1)
+pyplot.plot(t, accx, t, accy, t, accz, linewidth=1)
 pyplot.xlabel('Time (s)')
 pyplot.ylabel('Acceleration (Gs)')
 axis_labels = ['X-Axis', 'Y-Axis', 'Z-Axis']
@@ -73,7 +73,7 @@ pyplot.legend(axis_labels)
 
 pyplot.subplot(133)
 pyplot.title('Rotation vs. Time', fontsize=15, weight='bold')
-pyplot.plot(t[0:1200], GRYx[0:1200], t[0:1200], GRYy[0:1200], t[0:1200], GRYz[0:1200], linewidth=1)
+pyplot.plot(t, GRYx, t, GRYy, t, GRYz, linewidth=1)
 pyplot.xlabel('Time (s)')
 pyplot.ylabel('Rotation Rate (deg/s)')
 axis_labels = ['X-Axis', 'Y-Axis', 'Z-Axis']

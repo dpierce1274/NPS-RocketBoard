@@ -3,7 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="7223503c-7e21-4572-913e-f1509933bdbe" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Data Processing.py" beforeDir="false" afterPath="$PROJECT_DIR$/Data Processing.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -18,38 +18,26 @@
     <option name="OUTPUT_DIRECTORY" value="H:\MyDocs\Thesis\RocketBoard\NPS-RocketBoard\exportToHTML" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="Telemetry.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Telemetry.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="16" column="35" lean-forward="true" selection-start-line="16" selection-start-column="35" selection-end-line="16" selection-end-column="35" />
-              <folding>
-                <element signature="e#0#16#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Main.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../../../SS4861/ss4861-ay19q2/Main.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1513">
-              <caret line="106" lean-forward="true" selection-start-line="106" selection-end-line="106" />
-              <folding>
-                <element signature="e#381#390#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="Main.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-289">
+            <state relative-caret-position="527">
               <caret line="79" column="47" selection-start-line="79" selection-start-column="47" selection-end-line="79" selection-end-column="47" />
               <folding>
                 <element signature="e#1079#1090#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Data Processing.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Data Processing.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="732">
+              <caret line="96" lean-forward="true" selection-start-line="96" selection-end-line="96" />
+              <folding>
+                <element signature="e#0#34#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -78,7 +66,6 @@
         <option value="$PROJECT_DIR$/Flight Data - Abbreviated.txt" />
         <option value="$PROJECT_DIR$/mdl3115a2.py" />
         <option value="$PROJECT_DIR$/mpl3115a2.py" />
-        <option value="$PROJECT_DIR$/Data Processing.py" />
         <option value="$PROJECT_DIR$/../../Softare Backup/11.13.2018/ADXL377.py" />
         <option value="$PROJECT_DIR$/Accelerometer_Calibration.py" />
         <option value="$PROJECT_DIR$/adxl377.py" />
@@ -87,6 +74,7 @@
         <option value="$PROJECT_DIR$/../../../SS4861/ss4861-ay19q2/Main.py" />
         <option value="$PROJECT_DIR$/Main.py" />
         <option value="$PROJECT_DIR$/Telemetry.py" />
+        <option value="$PROJECT_DIR$/Data Processing.py" />
       </list>
     </option>
   </component>
@@ -140,7 +128,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.Data Processing OG">
+  <component name="RunManager" selected="Python.Data Processing">
     <configuration name="Data Processing OG" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="NPS-RocketBoard" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -202,8 +190,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.Data Processing OG" />
         <item itemvalue="Python.Data Processing" />
+        <item itemvalue="Python.Data Processing OG" />
         <item itemvalue="Python.adxl377" />
       </list>
     </recent_temporary>
@@ -227,11 +215,10 @@
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26995304" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5007825" side_tool="true" visible="true" weight="0.32942432" />
-      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49921754" visible="true" weight="0.32942432" />
+      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5078247" side_tool="true" weight="0.3283582" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Python Console" order="7" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49295774" weight="0.3283582" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49217528" visible="true" weight="0.3283582" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Favorites" order="2" side_tool="true" />
@@ -242,25 +229,26 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49921754" visible="true" weight="0.32942432" />
     </layout>
     <layout-to-restore>
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.17683882" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26995304" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="10" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49921754" visible="true" weight="0.32622603" />
-      <window_info anchor="bottom" id="Python Console" order="7" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.49217528" visible="true" weight="0.3283582" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Terminal" order="8" />
-      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5007825" side_tool="true" weight="0.32867885" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5078247" side_tool="true" visible="true" weight="0.3283582" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" />
       <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49921754" visible="true" weight="0.32942432" />
+      <window_info anchor="bottom" id="Python Console" order="7" />
     </layout-to-restore>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -272,7 +260,16 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file:H:/../..//H:/MyDocs/Thesis/RocketBoard/NPS-RocketBoard/mdl3115a2.py" />
+    <entry file="file://$PROJECT_DIR$/Main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1173">
+          <caret line="79" column="47" selection-start-line="79" selection-start-column="47" selection-end-line="79" selection-end-column="47" />
+          <folding>
+            <element signature="e#1079#1090#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file:H:/../..//H:/MyDocs/Thesis/RocketBoard/NPS-RocketBoard/IMU.py" />
     <entry file="file:H:/../..//H:/MyDocs/Thesis/RocketBoard/NPS-RocketBoard/adxl377.py" />
     <entry file="file:H:/../..//H:/MyDocs/Thesis/RocketBoard/NPS-RocketBoard/Data Processing.py" />
@@ -318,23 +315,28 @@
     <entry file="file:H:/../..//H:/MyDocs/Thesis/RocketBoard/NPS-RocketBoard/Flight Data - Abbreviated.txt" />
     <entry file="file:H:/../..//H:/MyDocs/Thesis/RocketBoard/NPS-RocketBoard/Data Processing.py" />
     <entry file="file:H:/../..//H:/MyDocs/Thesis/RocketBoard/NPS-RocketBoard/Data Processing OG.py" />
-    <entry file="file://$PROJECT_DIR$/Accelerometer_Calibration.py">
+    <entry file="file://$PROJECT_DIR$/ublox.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#14#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="-16198" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../../SS4861/ss4861-ay19q2/Main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="106" lean-forward="true" selection-start-line="106" selection-end-line="106" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ublox.py">
+    <entry file="file://$PROJECT_DIR$/Telemetry.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-6171" />
+        <state relative-caret-position="272">
+          <caret line="31" selection-start-line="31" selection-end-line="31" />
+        </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-289">
+        <state relative-caret-position="527">
           <caret line="79" column="47" selection-start-line="79" selection-start-column="47" selection-end-line="79" selection-end-column="47" />
           <folding>
             <element signature="e#1079#1090#0" expanded="true" />
@@ -342,22 +344,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../../../SS4861/ss4861-ay19q2/Main.py">
+    <entry file="file://$PROJECT_DIR$/Data Processing.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1513">
-          <caret line="106" lean-forward="true" selection-start-line="106" selection-end-line="106" />
+        <state relative-caret-position="732">
+          <caret line="96" lean-forward="true" selection-start-line="96" selection-end-line="96" />
           <folding>
-            <element signature="e#381#390#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Telemetry.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="16" column="35" lean-forward="true" selection-start-line="16" selection-start-column="35" selection-end-line="16" selection-end-column="35" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
+            <element signature="e#0#34#0" expanded="true" />
           </folding>
         </state>
       </provider>
