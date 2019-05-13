@@ -52,6 +52,13 @@ for line in fp.readlines():
     alt_reading = cols[16]
     alt.append(float(alt_reading[:-2]))
 
+# Find and Display Maximum Altitude
+
+start_alt = alt[0]
+max_alt = max(alt)
+max_alt_ftAGL = (max_alt-start_alt)*3.28084
+print('Maximum Altitude (AGL): %d feet' % max_alt_ftAGL)
+
 # Plot Results
 
 pyplot.subplot(131)
@@ -93,4 +100,3 @@ pyplot.plot(t, temp)
 pyplot.xlabel('Time (s)')
 pyplot.ylabel('Temperature (deg C)')
 pyplot.show()
-
