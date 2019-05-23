@@ -1,9 +1,20 @@
 #!/usr/bin/env python
 '''
-UBlox binary protocol handling
+
+ublox is the Python object for the NEO-M8N series GPS. The sensor communicates with the RPi via SPI.
+Various GPS messages can be pulled from the device. Currently, the rocket board pulls data from the NAV_POSLLH,
+NAV_STATUS, NAV_VELNED, and NAV_PVT messages.
+
+Source Author: Andrew Tridgell
+Name of File: ublox.py
+File Location: https://github.com/dpierce1274/NPS-RocketBoard.git
+Date Last Modified: Oct 2012
+
+Inputs: None
+Outputs: Various GPS messages
 
 Copyright Andrew Tridgell, October 2012
-Released under GNU GPL version 3 or later
+
 '''
 
 import struct

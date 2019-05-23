@@ -22,6 +22,20 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
+The Main flight software is the primary software script for the NPS SSAG Rocketboard.
+The software is manually initiated (and back grounded!) via a WiFi SSH terminal. The
+script captures the rocket's various flight sensor data and stores the data in a .txt file.
+The script also initiates a subprocess (Telemetry.py) that is responsible for capturing and
+sending GPS telemetry data via the MHX radio.
+
+Source Author: Dillon Pierce
+Name of File: Main.py
+File Location: https://github.com/dpierce1274/NPS-RocketBoard.git
+Date Last Modified: 23 May 2019
+
+
+
+
 '''
 
 import time
@@ -31,8 +45,6 @@ import adxl377
 import traceback
 import IMU
 from gpiozero import LED
-import serial
-import ublox
 import subprocess
 import shlex
 
@@ -110,17 +122,6 @@ def read_flt_params(baro, IMU, acc):
     return output
 
 
-def read_line(ser, line):
-    # This is a function that samples characters from the serial port one at a time if there are characters waiting.
-    # It continues to build the line and returns it to the main script
-    # Input: line
-    # Output: line
-    if ser.inWaiting() > 0:
-        c = ser.read(1)     # read one character (or timeout)
-        line = line + c     # add character to the line
-    return line             # returns message to main loop
-
-
 def write_to_file(filename, flt_params):
     # This function writes the flight parameters array to a .txt file on the SD Card
     # Input: flight parameters
@@ -128,22 +129,6 @@ def write_to_file(filename, flt_params):
     fp = open(filename, 'a+')
     fp.write(str(flt_params) + '\n')
     fp.close()
-
-
-def str_to_num(input):
-    # This function converts a GPS string out value with equals sign to a float value
-    # Inputs: String value with =
-    # Outputs: Float value
-
-    # Find the index of the equals sign
-    index = input.find('=')
-
-    # Remove all characters up to and including the equals sign
-    output = input[index + 1:]
-
-    output = float(output)
-
-    return output
 
 
 def status_led(check_led):

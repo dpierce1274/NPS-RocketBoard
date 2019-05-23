@@ -1,9 +1,43 @@
+'''
+MIT License
+
+Copyright (c) 2019 dpierce1274
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+Telemetry.py is a sub process that runs under Main.py that is responsible for capturing, sending, and
+storing GPS data. Telemetry data is sent via serial communications with the MHX radio to the ground station. Currently,
+the software is only configured for sending data. Adding a serial read capability to this script would enable ground
+station up link to the rocket.
+
+Source Author: Dillon Pierce
+Name of File: Telemetry.py
+File Location: https://github.com/dpierce1274/NPS-RocketBoard.git
+Date Last Modified: 23 May 2019
+'''
+
+
 import traceback
 import serial
 import ublox
 import time
 import sys
-import util
 
 
 def main():
@@ -74,8 +108,6 @@ def main():
             write_to_file(filename, data)
             send_gps(ser, data)
             check_msg = []
-            
-        
 
 
 def send_gps(ser, data):

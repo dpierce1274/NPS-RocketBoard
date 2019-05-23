@@ -20,6 +20,17 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+IMU is the Python object for the LSM9DS1 inertial measurement unit. The sensor communicates with the RPi via i2c.
+
+Source Authors: Mark Williams and Peter Peck
+Modified by: Dillon Pierce
+Name of File: mpl3115a2.py
+File Location: https://github.com/dpierce1274/NPS-RocketBoard.git
+Date Last Modified: 23 May 2019
+
+Inputs: None
+Outputs: Acceleration-Gs (x,y,z), Rotation-deg/s (x,y,z)
 """
 
 import smbus
@@ -35,7 +46,7 @@ gain = 0.07         # Gyro Gain based on init setting
 def detectIMU():
     try:
         # Check for LSM9DS1
-        # If no LSM9DS1 is conencted, there will be an I2C bus error and the program will exit.
+        # If no LSM9DS1 is connected, there will be an I2C bus error and the program will exit.
         # This section of code stops this from happening.
         LSM9DS1_WHO_XG_response = (bus.read_byte_data(LSM9DS1_GYR_ADDRESS, LSM9DS1_WHO_AM_I_XG))
         LSM9DS1_WHO_M_response = (bus.read_byte_data(LSM9DS1_MAG_ADDRESS, LSM9DS1_WHO_AM_I_M))

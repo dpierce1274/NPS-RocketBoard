@@ -1,3 +1,41 @@
+'''
+
+MIT License
+
+Copyright (c) 2019 dpierce1274
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+adxl377 is the Python object for the adxl377 "high-g" accelerometer. The sensor is analog, so the script is designed for
+communication with the analog-to-digital converter (TI ADS7828). The TI ADS7828 communicates with the RPi via i2c.
+Currently, channels 3-7 are unused on the TI ADS7828. Future iterations of the rocket board could make use of these
+excess channels.
+
+Source Author: Dillon Pierce
+Name of File: adxl377.py
+File Location: https://github.com/dpierce1274/NPS-RocketBoard.git
+Date Last Modified: 23 May 2019
+
+Inputs: BusID, Slave Address
+Outputs: Acceleration-Gs (x,y,z)
+'''
+
 from smbus import SMBus
 import struct
 

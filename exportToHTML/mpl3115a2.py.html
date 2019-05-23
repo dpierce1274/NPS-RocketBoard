@@ -42,6 +42,16 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
 SOFTWARE. 
  
+mpl3115a2 is the Python object for the mpl3115a2 barometric sensor. The sensor communicates with the RPi via i2c. 
+Altitude is computed using an equation provided in the sensor's documentation. 
+ 
+Source Author: Dillon Pierce 
+Name of File: mpl3115a2.py 
+File Location: https://github.com/dpierce1274/NPS-RocketBoard.git 
+Date Last Modified: 23 May 2019 
+ 
+Inputs: BusID, Slave Address, Sea level pressure (mbar) 
+Outputs: temperature (deg C), pressure (mbar), altitude (m) 
 '''</span><span class="s1"> 
  
 </span><span class="s2">import </span><span class="s1">smbus 
@@ -130,6 +140,6 @@ OFF_H = </span><span class="s3">0x2D</span><span class="s1">
                            self.__sea_level_pressure)**</span><span class="s3">0.1902632</span><span class="s1">)       </span><span class="s0"># Compute altitude from documentation formula</span><span class="s1"> 
  
         </span><span class="s0"># Return Values</span><span class="s1"> 
-        </span><span class="s2">return </span><span class="s4">'{:.2f}'</span><span class="s1">.format(temp), </span><span class="s4">'{:.2f}'</span><span class="s1">.format(pres_mbar), </span><span class="s4">'{:.0f}'</span><span class="s1">.format(alt)</span></pre>
+        </span><span class="s2">return </span><span class="s4">'{:.2f}'</span><span class="s1">.format(temp), </span><span class="s4">'{:.2f}'</span><span class="s1">.format(pres_mbar), </span><span class="s4">'{:.0f}'</span><span class="s1">.format(alt)  </span></pre>
 </body>
 </html>

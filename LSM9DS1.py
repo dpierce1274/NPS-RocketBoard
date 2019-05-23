@@ -22,6 +22,16 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
+LSM9DS1 contains the device registers for the LSM9DS1 inertial measurement unit.
+
+Source Authors: Mark Williams and Peter Peck 
+Name of File: mpl3115a2.py
+File Location: https://github.com/dpierce1274/NPS-RocketBoard.git
+Date Last Modified: 7 Jan 2018
+
+Inputs: None
+Outputs: None
+
 '''
 
 LSM9DS1_MAG_ADDRESS	= 0x1E
