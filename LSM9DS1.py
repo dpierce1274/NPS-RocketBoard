@@ -39,9 +39,9 @@ LSM9DS1_ACC_ADDRESS	= 0x6B
 LSM9DS1_GYR_ADDRESS = 0x6B
 
 
-#/////////////////////////////////////////
-#// LSM9DS1 Accel/Gyro (XL/G) Registers //
-#/////////////////////////////////////////
+#////////////////////////////////////////
+#// LSM9DS1 Accel/Gyro (XL/G) Registers /
+#////////////////////////////////////////
 LSM9DS1_ACT_THS				= 0x04
 LSM9DS1_ACT_DUR				= 0x05
 LSM9DS1_INT_GEN_CFG_XL		= 0x06
